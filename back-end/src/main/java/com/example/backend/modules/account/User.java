@@ -26,7 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = true)
@@ -65,7 +65,7 @@ public class User {
         authorities.add(userAuthority);
     }
 
-    public void changeUser(User user){
+    public void changeUser(User user) {
         this.userImage = user.getUserImage();
         this.userNickname = user.getUserNickname();
         this.email = user.getEmail();
