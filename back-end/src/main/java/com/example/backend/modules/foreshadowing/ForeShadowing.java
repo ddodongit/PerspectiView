@@ -1,11 +1,15 @@
 package com.example.backend.modules.foreshadowing;
 
 import com.example.backend.modules.product.Product;
+import com.example.backend.modules.story.StoryForeShadowing;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,6 +32,9 @@ public class ForeShadowing {
     @Column(nullable = false)
     private boolean fShadowClose;
 
+    @OneToMany(mappedBy = "fore_shadowing")
+    private Set<StoryForeShadowing> storyForeShadowings = new HashSet<>();
+
     @Builder
     public ForeShadowing(Long id, String fShadowName, String fShadowContent, boolean fShadowClose, Product product) {
         this.id = id;
@@ -37,7 +44,7 @@ public class ForeShadowing {
         this.product = product;
     }
 
-    public void updateForeShadowing(String fShadowName, String fShadowContent, boolean fShadowClose){
+    public void updateForeShadowing(String fShadowName, String fShadowContent, boolean fShadowClose) {
         this.fShadowName = fShadowName;
         this.fShadowContent = fShadowContent;
         this.fShadowClose = fShadowClose;
