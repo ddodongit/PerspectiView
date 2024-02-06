@@ -1,4 +1,4 @@
-package com.example.backend.modules.account;
+package com.example.backend.modules.user;
 
 import com.example.backend.modules.team.Enrollment;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -30,7 +30,7 @@ public class User {
     private String username;
 
     @Column(nullable = true)
-    private String userImage;
+    private String userImageUrl;
 
     @Column(nullable = false)
     private String userNickname;
@@ -65,27 +65,22 @@ public class User {
         authorities.add(userAuthority);
     }
 
-    public void changeUser(User user){
-        this.userImage = user.getUserImage();
+    public void changeUser(User user) {
+        this.userImageUrl = user.getUserImageUrl();
         this.userNickname = user.getUserNickname();
         this.email = user.getEmail();
         this.userPhone = user.getUserPhone();
         this.userInfo = user.getUserInfo();
     }
 
-    @Builder(builderMethodName = "requestBuilder")
-    public User(String userNickname, String image, String email, String userPhone, String userInfo) {
+    @Builder
+    public User(String username, String userImageUrl, String userNickname, String email, String userPhone, String userInfo, String provider, String providerId) {
+        this.username = username;
+        this.userImageUrl = userImageUrl;
         this.userNickname = userNickname;
-        this.userImage = image;
         this.email = email;
         this.userPhone = userPhone;
         this.userInfo = userInfo;
-    }
-    @Builder
-    public User(String username, String userNickname, String email, String provider, String providerId, List<UserAuthority> roles) {
-        this.username = username;
-        this.userNickname = userNickname;
-        this.email = email;
         this.provider = provider;
         this.providerId = providerId;
     }
