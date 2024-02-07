@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -13,16 +14,16 @@ public class ForeShadowingResponseDto {
     String foreShadowingName;
     String foreShadowingContent;
     boolean foreShadowingClose;
-    List<Long> storyList;
+    Map<String,Long> storyIdList;
 
-//    public static ForeShadowingResponseDto from(ForeShadowing foreShadowing,List<Long> storyList){
-    public static ForeShadowingResponseDto from(ForeShadowing foreShadowing){
+//    public static ForeShadowingResponseDto from(ForeShadowing foreShadowing){
+        public static ForeShadowingResponseDto from(ForeShadowing foreShadowing,Map<String,Long> storyList){
         return ForeShadowingResponseDto.builder()
                 .foreShadowingId(foreShadowing.getId())
                 .foreShadowingName(foreShadowing.getFShadowName())
                 .foreShadowingContent(foreShadowing.getFShadowContent())
                 .foreShadowingClose(foreShadowing.isFShadowClose())
-//                .storyList(storyList)
+                .storyIdList(storyList)
                 .build();
     }
 }
