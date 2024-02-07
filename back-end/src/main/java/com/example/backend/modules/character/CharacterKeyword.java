@@ -16,8 +16,10 @@ public class CharacterKeyword {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "character_id")
     private Character character;
 
     @ManyToOne
+    @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 }
