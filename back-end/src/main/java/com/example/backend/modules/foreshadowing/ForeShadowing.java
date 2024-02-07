@@ -38,12 +38,13 @@ public class ForeShadowing {
     private Set<StoryForeShadowing> storyForeShadowings = new HashSet<>();
 
     @Builder
-    public ForeShadowing(Long id, String fShadowName, String fShadowContent, boolean fShadowClose, Product product) {
+    public ForeShadowing(Long id, String fShadowName, String fShadowContent, boolean fShadowClose, Product product,Set<StoryForeShadowing> storyForeShadowings) {
         this.id = id;
         this.fShadowName = fShadowName;
         this.fShadowContent = fShadowContent;
         this.fShadowClose = fShadowClose;
         this.product = product;
+        this.storyForeShadowings =storyForeShadowings;
     }
 
     public void updateForeShadowing(String fShadowName, String fShadowContent, boolean fShadowClose){
