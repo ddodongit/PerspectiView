@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,7 +75,7 @@ public class ForeShadowingService {
         }
 
         ForeShadowing findForeShadowing = foreShadowingRepository.findById(foreShadowing.getId()).orElseThrow(() -> new RuntimeException());
-        findForeShadowing.updateForeShadowing(findForeShadowing.getFShadowName(), findForeShadowing.getFShadowContent(), findForeShadowing.isFShadowClose());
+        findForeShadowing.updateForeShadowing(findForeShadowing.getFShadowName(), findForeShadowing.getFShadowContent(), findForeShadowing.getFShadowClose());
         return foreShadowing;
     }
 
@@ -102,12 +99,31 @@ public class ForeShadowingService {
     /**
      * 복선의 스토리 리스트 출력
      */
-    public Map<String, Long> findStories(ForeShadowing foreShadowing){
-        Set<StoryForeShadowing> storyForeShadowings = foreShadowing.getStoryForeShadowings();
-        Map<String,Long> storyids = new HashMap<>();
-        for(StoryForeShadowing sfs:storyForeShadowings){
-            storyids.put("storyId",sfs.getStory().getId());
+    public List<FshadowStoryIdDto> findStories(ForeShadowing foreShadowing) {
+        //복선으로 중간 테이블 리스트 받아오기
+        List<StoryForeShadowing> sfs = storyForeShadowingRepository.findByForeShadowing(foreShadowing);
+        List<FshadowStoryIdDto> storyids = new ArrayList<>();
+        //중간테이블로 스토리 정보 얻기
+        for (StoryForeShadowing sf : sfs) {
+            //storyforeshadowing에 Entitygraph로 join 해서 story정보 담겨있음
+            storyids.add(FshadowStoryIdDto.builder()
+                    .storyId(sf.getStory().getId())
+                    .build());
         }
         return storyids;
     }
+
+    /**
+     * 복선 스토리에 추가
+     */
+
+
+    /**
+     * 복선 스토리에서 삭제
+     */
+
+    /**
+     * 복선 회수
+     */
+
 }
