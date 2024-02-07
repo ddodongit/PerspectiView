@@ -156,4 +156,24 @@ class ForeShadowingServiceTest {
         List<ForeShadowing> foreShadowingList = foreShadowingService.findByProductId(user, team.getId(), product.getId());
         assertEquals(foreShadowingList.size(), 0);
     }
+    
+    @Test
+    public void 복선전체조회() throws Exception{
+        //given
+        ForeShadowing foreShadowing = ForeShadowing.builder()
+                .product(product)
+                .fShadowName("fshName")
+                .fShadowContent("fshContent")
+                .fShadowClose(false)
+                .storyForeShadowings(null)
+                .build();
+
+        User user = makeUser("nickname");
+        Team team = makeTeam(user);
+        foreShadowingService.createForeShadowing(user, team.getId(), product.getId(), foreShadowing);
+
+        //when
+
+        //then
+    }
 }
