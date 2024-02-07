@@ -3,6 +3,8 @@ package com.example.backend.modules.foreshadowing;
 import com.example.backend.modules.api.ApiResult;
 import com.example.backend.modules.auth.principal.PrincipalDetails;
 import com.example.backend.modules.product.ProductService;
+import com.example.backend.modules.story.Story;
+import com.example.backend.modules.story.StoryService;
 import com.example.backend.modules.team.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,8 @@ public class foreShadowingController {
                                                  @PathVariable("productId") Long productId,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ForeShadowing foreShadowing = foreShadowingService.createForeShadowing(principalDetails.getUser(), teamId, productId, foreShadowingRequestDto.of(foreShadowingRequestDto));
-        return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing));
+        Map<String,Long> storyids = foreShadowingService.findStories(foreShadowing);
+        return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing,storyids));
     }
 
     @PatchMapping("/{foreshadowingId}")
@@ -38,7 +41,8 @@ public class foreShadowingController {
                                                  @PathVariable("productId") Long productId,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
         ForeShadowing foreShadowing = foreShadowingService.updateForeShadowing(principalDetails.getUser(), teamId, productId, ForeShadowingRequestDto.of(foreShadowingRequestDto));
-        return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing));
+        Map<String,Long> storyids = foreShadowingService.findStories(foreShadowing);
+        return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing,storyids));
     }
 
     @DeleteMapping("/{foreshadowingId}")
@@ -51,13 +55,14 @@ public class foreShadowingController {
     }
 
     @GetMapping
-    public ApiResult<Map<Long,ForeShadowing>> findAllFshadow(@PathVariable("teamId") Long teamId,
+    public ApiResult<Map<Long,ForeShadowingResponseDto>> findAllFshadow(@PathVariable("teamId") Long teamId,
                                                                     @PathVariable("productId") Long productId,
                                                                     @AuthenticationPrincipal PrincipalDetails principalDetails){
         List<ForeShadowing> foreShadowings = foreShadowingService.findByProductId(principalDetails.getUser(),teamId,productId);
-        Map<Long, ForeShadowing> result = new HashMap<>();
+        Map<Long, ForeShadowingResponseDto> result = new HashMap<>();
         for(ForeShadowing fs : foreShadowings){
-            result.put(fs.getId(),fs);
+            Map<String,Long> storyids = foreShadowingService.findStories(fs);
+            result.put(fs.getId(),ForeShadowingResponseDto.from(fs,storyids));
         }
         return ApiResult.OK(result);
     }
