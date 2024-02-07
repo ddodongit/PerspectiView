@@ -1,5 +1,8 @@
 package com.example.backend.modules.foreshadowing;
 
+import com.example.backend.modules.story.Story;
+import com.example.backend.modules.story.StoryForeShadowing;
+import com.example.backend.modules.story.StoryForeShadowingRepository;
 import com.example.backend.modules.user.User;
 import com.example.backend.modules.product.Product;
 import com.example.backend.modules.product.ProductService;
@@ -7,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +22,8 @@ public class ForeShadowingService {
     private final ForeShadowingRepository foreShadowingRepository;
 
     private final ProductService productService;
+
+    private final StoryForeShadowingRepository storyForeShadowingRepository;
 
     /**
      * 복선 생성
@@ -89,5 +97,17 @@ public class ForeShadowingService {
             throw new RuntimeException();
         }
         foreShadowingRepository.deleteById(fShadowingId);
+    }
+
+    /**
+     * 복선의 스토리 리스트 출력
+     */
+    public Map<String, Long> findStories(ForeShadowing foreShadowing){
+        Set<StoryForeShadowing> storyForeShadowings = foreShadowing.getStoryForeShadowings();
+        Map<String,Long> storyids = new HashMap<>();
+        for(StoryForeShadowing sfs:storyForeShadowings){
+            storyids.put("storyId",sfs.getStory().getId());
+        }
+        return storyids;
     }
 }
