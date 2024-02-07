@@ -31,7 +31,7 @@ public class foreShadowingController {
                                                  @PathVariable("productId") Long productId,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ForeShadowing foreShadowing = foreShadowingService.createForeShadowing(principalDetails.getUser(), teamId, productId, foreShadowingRequestDto.of(foreShadowingRequestDto));
-        Map<String,Long> storyids = foreShadowingService.findStories(foreShadowing);
+        List<FshadowStoryIdDto> storyids = foreShadowingService.findStories(foreShadowing);
         return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing,storyids));
     }
 
@@ -41,7 +41,7 @@ public class foreShadowingController {
                                                  @PathVariable("productId") Long productId,
                                                  @AuthenticationPrincipal PrincipalDetails principalDetails){
         ForeShadowing foreShadowing = foreShadowingService.updateForeShadowing(principalDetails.getUser(), teamId, productId, ForeShadowingRequestDto.of(foreShadowingRequestDto));
-        Map<String,Long> storyids = foreShadowingService.findStories(foreShadowing);
+        List<FshadowStoryIdDto> storyids = foreShadowingService.findStories(foreShadowing);
         return ApiResult.OK(ForeShadowingResponseDto.from(foreShadowing,storyids));
     }
 
@@ -61,7 +61,7 @@ public class foreShadowingController {
         List<ForeShadowing> foreShadowings = foreShadowingService.findByProductId(principalDetails.getUser(),teamId,productId);
         Map<Long, ForeShadowingResponseDto> result = new HashMap<>();
         for(ForeShadowing fs : foreShadowings){
-            Map<String,Long> storyids = foreShadowingService.findStories(fs);
+            List<FshadowStoryIdDto> storyids = foreShadowingService.findStories(fs);
             result.put(fs.getId(),ForeShadowingResponseDto.from(fs,storyids));
         }
         return ApiResult.OK(result);
