@@ -1,6 +1,6 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import lombok.Builder;
 import lombok.Data;
@@ -12,17 +12,17 @@ import java.util.List;
 public class StoryResponseDto {
     private Long storyId;
     private String storyTitle;
-    private List<Character> characters;
+    private List<Person> people;
     private List<ForeShadowing> foreShadowings;
     private Content content;
     private int positionX;
     private Double positionY;
 
-    public static StoryResponseDto from(Story story, List<Character> characters, List<ForeShadowing> foreShadowings){
+    public static StoryResponseDto from(Story story, List<Person> people, List<ForeShadowing> foreShadowings){
         return StoryResponseDto.builder()
                 .storyId(story.getId())
                 .storyTitle(story.getTitle())
-                .characters(characters)
+                .people(people)
                 .foreShadowings(foreShadowings)
                 .foreShadowings(foreShadowings)
                 .content(story.getContent())

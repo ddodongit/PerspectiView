@@ -1,8 +1,7 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
-import com.example.backend.modules.plot.Plot;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class StoryRequestDto {
     private String storyTitle;
     private String storyContent;
-    private List<Character> characters;
+    private List<Person> people;
     private List<ForeShadowing> foreShadowings;
     private int positionX;
     private Double positionY;

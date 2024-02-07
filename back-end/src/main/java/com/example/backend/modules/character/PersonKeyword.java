@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
-public class CharacterKeyword {
+public class PersonKeyword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "character_id")
-    private Character character;
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     @ManyToOne
     @JoinColumn(name = "keyword_id")

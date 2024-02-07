@@ -1,11 +1,7 @@
 package com.example.backend.modules.foreshadowing;
 
-import com.example.backend.modules.character.Character;
-import com.example.backend.modules.plot.Plot;
-import com.example.backend.modules.plot.PlotRepository;
 import com.example.backend.modules.product.Product;
 import com.example.backend.modules.product.ProductRepository;
-import com.example.backend.modules.story.*;
 import com.example.backend.modules.team.Team;
 import com.example.backend.modules.team.TeamRepository;
 import com.example.backend.modules.team.TeamService;
@@ -19,9 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,6 +1,6 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import com.example.backend.modules.foreshadowing.ForeShadowingRepository;
 import com.example.backend.modules.plot.Plot;
@@ -10,14 +10,10 @@ import com.example.backend.modules.product.ProductRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.util.ThreadDeadlockDetector;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +58,7 @@ class StoryServiceTest {
 
     private List<ForeShadowing> foreShadowings;
 
-    List<Character> characters;
+    List<Person> people;
 
     private Story story;
 
@@ -101,10 +97,10 @@ class StoryServiceTest {
                 .storyRelations(new HashSet<>())
                 .build();
 
-        characters = new ArrayList<>();
+        people = new ArrayList<>();
         foreShadowings = new ArrayList<>();
 
-        storyService.createStory(story, "", characters);
+        storyService.createStory(story, "", people);
 
         foreShadowing = ForeShadowing.builder()
                 .product(product)
@@ -163,7 +159,7 @@ class StoryServiceTest {
 
 
         //when
-        Story result = storyService.createStory(s, content,characters);
+        Story result = storyService.createStory(s, content, people);
         em.flush();
         em.clear();
 
@@ -198,7 +194,7 @@ class StoryServiceTest {
                 .storyRelations(new HashSet<>())
                 .build();
         //when
-        Story updatedStory = storyService.updateStory(newStory, characters, foreShadowings);
+        Story updatedStory = storyService.updateStory(newStory, people, foreShadowings);
         em.flush();
         em.clear();
         List<Story> checkQuery = storyRepository.findWithPlotByPlot(plot);

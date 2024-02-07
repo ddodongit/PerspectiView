@@ -13,25 +13,25 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CharacterService {
-    private final CharacterRepository characterRepository;
+public class PersonService {
+    private final PersonRepository personRepository;
     private final TeamService teamService;
     private final ProductService productService;
 
     /**
      * 등장인물 생성
      *
-     * @param character 등장인물
+     * @param person 등장인물
      * @param productId 작품
      * @param teamId    팀 아이디
      * @param user      유저
      * @return 등장인물
      */
     @Transactional
-    public Character createCharacter(Character character, Long productId, Long teamId, User user) {
+    public Person createCharacter(Person person, Long productId, Long teamId, User user) {
         teamService.checkIfManager(user, teamService.getTeam(teamId));
 
-        return characterRepository.save(character);
+        return personRepository.save(person);
     }
 
 
@@ -43,12 +43,12 @@ public class CharacterService {
      * @param user      유저
      * @return 등장인물 리스트
      */
-    public List<Character> getCharacters(Long productId, Long teamId, User user) {
+    public List<Person> getCharacters(Long productId, Long teamId, User user) {
         Product product = productService.findByProductId(user, teamId, productId);
         teamService.checkIfMember(user, teamService.getTeam(teamId));
 
         // 해당 작품에 포함된 인물인지도 검사해야함.
-        return characterRepository.findAllByProduct(product);
+        return personRepository.findAllByProduct(product);
     }
 
     /**
@@ -60,18 +60,18 @@ public class CharacterService {
      * @param user      유저
      * @return 등장인물
      */
-    public Character getCharacter(Long charterId, Long productId, Long teamId, User user) {
+    public Person getCharacter(Long charterId, Long productId, Long teamId, User user) {
         teamService.checkIfMember(user, teamService.getTeam(teamId));
 
         // 해당 작품에 포함된 인물인지도 검사해야함.
 
-        return characterRepository.findById(charterId).orElseThrow(() -> new RuntimeException());
+        return personRepository.findById(charterId).orElseThrow(() -> new RuntimeException());
     }
 
     /**
      * 등장인물 정보 수정
      *
-     * @param character   등장인물
+     * @param person   등장인물
      * @param characterId 등장인물 아이디
      * @param productId   작품 아이디
      * @param teamId      팀 아이디
@@ -79,13 +79,13 @@ public class CharacterService {
      * @return 등장인물
      */
     @Transactional
-    public Character updateCharacter(Character character, Long characterId, Long productId, Long teamId, User user) {
+    public Person updateCharacter(Person person, Long characterId, Long productId, Long teamId, User user) {
         teamService.checkIfManager(user, teamService.getTeam(teamId));
 
-        Character newCharacter = characterRepository.findById(characterId).orElseThrow(() -> new RuntimeException());
-        newCharacter.changeCharacter(character);
+        Person newPerson = personRepository.findById(characterId).orElseThrow(() -> new RuntimeException());
+        newPerson.changeCharacter(person);
 
-        return newCharacter;
+        return newPerson;
     }
 
     /**
@@ -100,8 +100,8 @@ public class CharacterService {
     public void deleteCharacter(Long charterId, Long productId, Long teamId, User user) {
         teamService.checkIfManager(user, teamService.getTeam(teamId));
 
-        Character findChar = characterRepository.findById(charterId).orElseThrow(() -> new RuntimeException());
+        Person findChar = personRepository.findById(charterId).orElseThrow(() -> new RuntimeException());
 
-        characterRepository.delete(findChar);
+        personRepository.delete(findChar);
     }
 }

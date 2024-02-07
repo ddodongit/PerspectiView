@@ -2,7 +2,6 @@ package com.example.backend.modules.character;
 
 import com.example.backend.modules.api.ApiResult;
 import com.example.backend.modules.auth.principal.PrincipalDetails;
-import com.example.backend.modules.team.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,42 +14,42 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/team/{teamId}/product/{productId}/character")
 public class CharacterController {
-    private final CharacterService characterService;
+    private final PersonService personService;
 
     @GetMapping
-    public ApiResult<List<CharacterResponseDto>> getCharacters(@PathVariable Long productId, @PathVariable Long teamId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        List<Character> characters = characterService.getCharacters(productId, teamId, principalDetails.getUser());
-        return ApiResult.OK(characters.stream().map(CharacterResponseDto::of)
+    public ApiResult<List<PersonResponseDto>> getCharacters(@PathVariable Long productId, @PathVariable Long teamId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<Person> people = personService.getCharacters(productId, teamId, principalDetails.getUser());
+        return ApiResult.OK(people.stream().map(PersonResponseDto::of)
                 .collect(Collectors.toList()));
     }
 
     @GetMapping("/{characterId}")
-    public ApiResult<CharacterResponseDto> getCharacter(@PathVariable Long productId, @PathVariable Long teamId,
-                                                        @AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long characterId) {
-        Character character = characterService.getCharacter(characterId, productId, teamId, principalDetails.getUser());
-        return ApiResult.OK(CharacterResponseDto.of(character));
+    public ApiResult<PersonResponseDto> getCharacter(@PathVariable Long productId, @PathVariable Long teamId,
+                                                     @AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long characterId) {
+        Person person = personService.getCharacter(characterId, productId, teamId, principalDetails.getUser());
+        return ApiResult.OK(PersonResponseDto.of(person));
     }
 
     @DeleteMapping("/{characterId}")
-    public ApiResult<CharacterResponseDto> deleteCharacter(@PathVariable Long productId, @PathVariable Long teamId,
-                                                           @AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                           @PathVariable Long characterId) {
-        characterService.deleteCharacter(characterId, productId, teamId, principalDetails.getUser());
+    public ApiResult<PersonResponseDto> deleteCharacter(@PathVariable Long productId, @PathVariable Long teamId,
+                                                        @AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                        @PathVariable Long characterId) {
+        personService.deleteCharacter(characterId, productId, teamId, principalDetails.getUser());
         return ApiResult.OK(null);
     }
 
     @PatchMapping("/{characterId}")
-    public ApiResult<CharacterResponseDto> updateCharacter(@PathVariable Long productId, @PathVariable Long teamId, @AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                           @PathVariable Long characterId, @RequestBody @Valid CharacterRequestDto characterRequestDto) {
-        Character character = characterService.updateCharacter(CharacterRequestDto.from(characterRequestDto), characterId, productId, teamId, principalDetails.getUser());
-        return ApiResult.OK(CharacterResponseDto.of(character));
+    public ApiResult<PersonResponseDto> updateCharacter(@PathVariable Long productId, @PathVariable Long teamId, @AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                        @PathVariable Long characterId, @RequestBody @Valid PersonRequestDto personRequestDto) {
+        Person person = personService.updateCharacter(PersonRequestDto.from(personRequestDto), characterId, productId, teamId, principalDetails.getUser());
+        return ApiResult.OK(PersonResponseDto.of(person));
     }
 
     @PostMapping
-    public ApiResult<CharacterResponseDto> createCharacter(@PathVariable Long productId, @PathVariable Long teamId,
-                                                           @RequestBody @Valid CharacterRequestDto characterRequestDto,
-                                                           @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Character character = characterService.createCharacter(CharacterRequestDto.from(characterRequestDto), productId, teamId, principalDetails.getUser());
-        return ApiResult.OK(CharacterResponseDto.of(character));
+    public ApiResult<PersonResponseDto> createCharacter(@PathVariable Long productId, @PathVariable Long teamId,
+                                                        @RequestBody @Valid PersonRequestDto personRequestDto,
+                                                        @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Person person = personService.createCharacter(PersonRequestDto.from(personRequestDto), productId, teamId, principalDetails.getUser());
+        return ApiResult.OK(PersonResponseDto.of(person));
     }
 }

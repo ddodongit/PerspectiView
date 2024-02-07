@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CharacterRepository extends JpaRepository<Character, Long> {
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @EntityGraph(attributePaths = "product")
-    List<Character> findAllByProduct(Product product);
+    List<Person> findAllByProduct(Product product);
 }

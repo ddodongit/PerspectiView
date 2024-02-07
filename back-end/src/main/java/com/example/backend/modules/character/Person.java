@@ -1,6 +1,5 @@
 package com.example.backend.modules.character;
 
-import com.example.backend.modules.keyword.Keyword;
 import com.example.backend.modules.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +12,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Character {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,8 +30,8 @@ public class Character {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "character")
-    private Set<CharacterKeyword> characterKeywords = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<PersonKeyword> personKeywords = new HashSet<>();
 
     @Column(nullable = true)
     private double positionX;
@@ -41,13 +40,13 @@ public class Character {
     private double positionY;
 
     @Builder
-    public Character(String characterName, Product product) {
+    public Person(String characterName, Product product) {
         this.characterName = characterName;
         this.product = product;
     }
 
     @Builder(builderMethodName = "positionBuilder")
-    public Character(String characterName, String characterDetail, double positionX, double positionY) {
+    public Person(String characterName, String characterDetail, double positionX, double positionY) {
         this.characterName = characterName;
 
 
@@ -56,19 +55,19 @@ public class Character {
         this.positionY = positionY;
     }
 
-    public void changeCharacter(Character character) {
-        this.characterName = character.getCharacterName();
-        this.characterImageUrl = character.getCharacterImageUrl();
-        this.characterDetail = character.getCharacterDetail();
-        this.positionX = character.getPositionX();
-        this.positionY = character.getPositionY();
+    public void changeCharacter(Person person) {
+        this.characterName = person.getCharacterName();
+        this.characterImageUrl = person.getCharacterImageUrl();
+        this.characterDetail = person.getCharacterDetail();
+        this.positionX = person.getPositionX();
+        this.positionY = person.getPositionY();
     }
 
-    public void addKeyword(CharacterKeyword characterKeyword) {
-        this.characterKeywords.add(characterKeyword);
+    public void addKeyword(PersonKeyword personKeyword) {
+        this.personKeywords.add(personKeyword);
     }
 
-    public void removeKeywords(CharacterKeyword characterKeyword) {
-        characterKeywords.remove(characterKeyword);
+    public void removeKeywords(PersonKeyword personKeyword) {
+        personKeywords.remove(personKeyword);
     }
 }

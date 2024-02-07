@@ -1,7 +1,7 @@
 package com.example.backend.modules.productrelation;
 
-import com.example.backend.modules.character.Character;
-import com.example.backend.modules.character.CharacterService;
+import com.example.backend.modules.character.Person;
+import com.example.backend.modules.character.PersonService;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import com.example.backend.modules.foreshadowing.ForeShadowingRepository;
 import com.example.backend.modules.plot.Plot;
@@ -18,9 +18,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,7 +59,7 @@ class ProductRelationServiceTest {
     ProductRepository productRepository;
 
     @Autowired
-    CharacterService characterService;
+    PersonService personService;
 
     @Autowired
     PlotRepository plotRepository;
@@ -90,11 +88,11 @@ class ProductRelationServiceTest {
 
     private List<ForeShadowing> foreShadowings;
 
-    List<Character> characters;
+    List<Person> people;
 
-    private Character fromCharacter;
+    private Person fromPerson;
 
-    private Character toCharacter;
+    private Person toPerson;
 
     private Story story;
 
@@ -151,21 +149,21 @@ class ProductRelationServiceTest {
                 .storyRelations(new HashSet<>())
                 .build();
 
-        characters = new ArrayList<>();
+        people = new ArrayList<>();
         foreShadowings = new ArrayList<>();
-        storyService.createStory(story, "", characters);
+        storyService.createStory(story, "", people);
 
-        fromCharacter = Character.builder()
+        fromPerson = Person.builder()
                 .product(product)
-                .characterName("fromCharacter")
+                .characterName("fromPerson")
                 .build();
 
-        toCharacter = Character.builder()
+        toPerson = Person.builder()
                 .product(product)
-                .characterName("toCharacter")
+                .characterName("toPerson")
                 .build();
-        characterService.createCharacter(fromCharacter, product.getId(), team.getId(), user);
-        characterService.createCharacter(toCharacter, product.getId(), team.getId(), user);
+        personService.createCharacter(fromPerson, product.getId(), team.getId(), user);
+        personService.createCharacter(toPerson, product.getId(), team.getId(), user);
 
         foreShadowing = ForeShadowing.builder()
                 .product(product)
@@ -194,8 +192,8 @@ class ProductRelationServiceTest {
         ProductRelation productRelation = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("info")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
 
         //when
@@ -212,8 +210,8 @@ class ProductRelationServiceTest {
         ProductRelation productRelation = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("info")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
         productRelationService.createProductRelation(productRelation);
 
@@ -230,8 +228,8 @@ class ProductRelationServiceTest {
         ProductRelation productRelation = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("info")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
         productRelationService.createProductRelation(productRelation);
         //when
@@ -248,16 +246,16 @@ class ProductRelationServiceTest {
         ProductRelation productRelation = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("info")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
         productRelationService.createProductRelation(productRelation);
 
         ProductRelation beforeUpdate = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("updateinfo")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
         //when
         ProductRelation afterUpdate = productRelationService.updateProductRelation(productRelation.getId(), beforeUpdate);
@@ -272,8 +270,8 @@ class ProductRelationServiceTest {
         ProductRelation productRelation = ProductRelation.builder()
                 .product(product)
                 .productRelationInfo("info")
-                .fromCharacter(fromCharacter)
-                .toCharacter(toCharacter)
+                .fromPerson(fromPerson)
+                .toPerson(toPerson)
                 .build();
         productRelationService.createProductRelation(productRelation);
 

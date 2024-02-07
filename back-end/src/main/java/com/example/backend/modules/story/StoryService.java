@@ -1,13 +1,11 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +23,7 @@ public class StoryService {
      * 스토리 생성
      */
     @Transactional
-    public Story createStory(Story story, String storycontent, List<Character> characters) {
+    public Story createStory(Story story, String storycontent, List<Person> people) {
         /**
          * 순서는 플롯 안에서의 순서는 따진다.
          * update story s left join plot p
@@ -42,10 +40,10 @@ public class StoryService {
 
         Story madeStory = storyRepository.save(story);
 
-        for (Character c : characters) {
+        for (Person c : people) {
             StoryRelation storyRelation = StoryRelation.builder()
                     .story(madeStory)
-                    .character(c).build();
+                    .person(c).build();
             madeStory.addStoryRelation(storyRelationRepository.save(storyRelation));
         }
 
@@ -68,12 +66,12 @@ public class StoryService {
     /**
      * 스토리 수정
      * @param story
-     * @param characters
+     * @param people
      * @param foreShadowings
      * @return
      */
     @Transactional
-    public Story updateStory(Story story, List<Character> characters, List<ForeShadowing> foreShadowings) {
+    public Story updateStory(Story story, List<Person> people, List<ForeShadowing> foreShadowings) {
         //먼저 있던 리스트를 없애고 새로운 리스트 넣기
         storyRelationRepository.deleteAll(story.getStoryRelations());
         storyForeShadowingRepository.deleteAll(story.getStoryForeShadowings());
@@ -83,8 +81,8 @@ public class StoryService {
         Set<StoryRelation> storyRelations;
         Set<StoryForeShadowing> storyForeShadowings;
 
-        storyRelations = characters.stream()
-                .map(c -> StoryRelation.builder().story(findStory).character(c).build())
+        storyRelations = people.stream()
+                .map(c -> StoryRelation.builder().story(findStory).person(c).build())
                 .map(storyRelationRepository::save)
                 .collect(Collectors.toSet());
 
@@ -116,15 +114,15 @@ public class StoryService {
      */
     public StoryResponseDto findByStoryId(Long storyId) {
         Story story = storyRepository.findWithPlotById(storyId).orElseThrow(() -> new RuntimeException());
-        List<Character> characterList = story.getStoryRelations().stream()
-                .map(StoryRelation::getCharacter)
+        List<Person> personList = story.getStoryRelations().stream()
+                .map(StoryRelation::getPerson)
                 .collect(Collectors.toList());
 
         List<ForeShadowing> foreShadowingList = story.getStoryForeShadowings().stream()
                 .map(StoryForeShadowing::getForeShadowing)
                 .collect(Collectors.toList());
 
-        return StoryResponseDto.from(story, characterList, foreShadowingList);
+        return StoryResponseDto.from(story, personList, foreShadowingList);
     }
 
     /**

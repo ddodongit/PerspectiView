@@ -27,19 +27,19 @@ import static org.mockito.Mockito.verify;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
-class CharacterServiceTest {
+class PersonServiceTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Autowired
-    private CharacterRepository characterRepository;
+    private PersonRepository personRepository;
 
     @Autowired
     private TeamRepository teamRepository;
 
     @Autowired
-    private CharacterService characterService;
+    private PersonService personService;
 
     @Autowired
     private ProductRepository productRepository;
@@ -55,15 +55,15 @@ class CharacterServiceTest {
         //given
         Product product = Product.builder().title("title").info("info").category(null).build();
         productRepository.save(product);
-        Character character1 = Character.builder().characterName("뽀로로").product(product).build();
-        Character character2 = Character.builder().characterName("포비").product(product).build();
-        Character character3 = Character.builder().characterName("루피").product(product).build();
+        Person person1 = Person.builder().characterName("뽀로로").product(product).build();
+        Person person2 = Person.builder().characterName("포비").product(product).build();
+        Person person3 = Person.builder().characterName("루피").product(product).build();
 
-        characterRepository.save(character1);
-        characterRepository.save(character2);
-        characterRepository.save(character3);
+        personRepository.save(person1);
+        personRepository.save(person2);
+        personRepository.save(person3);
         //when
-        List<Character> result = characterRepository.findAllByProduct(product);
+        List<Person> result = personRepository.findAllByProduct(product);
 
         //then
         Assertions.assertThat(result.size()).isEqualTo(3);
@@ -74,14 +74,14 @@ class CharacterServiceTest {
     void 단일인물조회() throws Exception {
         //given
         Product product = Product.builder().title("title").info("info").category(null).build();
-        Character character1 = Character.builder().characterName("뽀로로").product(product).build();
+        Person person1 = Person.builder().characterName("뽀로로").product(product).build();
         productRepository.save(product);
-        characterRepository.save(character1);
+        personRepository.save(person1);
         //when
-        Optional<Character> result = characterRepository.findById(1L);
+        Optional<Person> result = personRepository.findById(1L);
 
         //then
-        Assertions.assertThat(result.get().getCharacterName()).isEqualTo(character1.getCharacterName());
+        Assertions.assertThat(result.get().getCharacterName()).isEqualTo(person1.getCharacterName());
     }
 
     @Test
@@ -89,7 +89,7 @@ class CharacterServiceTest {
     void 등장인물생성() {
         // given
         Product product = Product.builder().title("title").info("info").category(null).build();
-        Character character1 = Character.builder().characterName("뽀로로").product(product).build();
+        Person person1 = Person.builder().characterName("뽀로로").product(product).build();
         User user = User.builder().userNickname("nickname").email("email").build();
         Team team = Team.builder().title("title").info("info").personal(false).build();
         team.addManager(user);
@@ -97,10 +97,10 @@ class CharacterServiceTest {
 
         Long productId = 1L;
         // when
-        Character result = characterService.createCharacter(character1, productId, team.getId(), user);
+        Person result = personService.createCharacter(person1, productId, team.getId(), user);
 
         // then
-        Assertions.assertThat(result.getCharacterName()).isEqualTo(character1.getCharacterName());
+        Assertions.assertThat(result.getCharacterName()).isEqualTo(person1.getCharacterName());
     }
 
     @Test
@@ -108,21 +108,21 @@ class CharacterServiceTest {
     void 등장인물삭제() {
         // given
         Product product = Product.builder().title("title").info("info").category(null).build();
-        Character character1 = Character.builder().characterName("뽀로로").product(product).build();
+        Person person1 = Person.builder().characterName("뽀로로").product(product).build();
         User user = User.builder().userNickname("nickname").email("email").build();
         Team team = Team.builder().title("title").info("info").personal(false).build();
         team.addManager(user);
         teamRepository.save(team);
         Long productId = 1L;
-        characterService.createCharacter(character1, productId, team.getId(), user);
+        personService.createCharacter(person1, productId, team.getId(), user);
 
 
         // when
 
-        characterService.deleteCharacter(character1.getId(), productId, team.getId(), user);
+        personService.deleteCharacter(person1.getId(), productId, team.getId(), user);
         // then
         assertThrows(RuntimeException.class, () -> {
-            characterService.getCharacter(character1.getId(), productId, team.getId(), user);
+            personService.getCharacter(person1.getId(), productId, team.getId(), user);
         });
     }
 }

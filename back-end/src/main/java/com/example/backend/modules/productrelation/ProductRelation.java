@@ -1,6 +1,6 @@
 package com.example.backend.modules.productrelation;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import com.example.backend.modules.product.Product;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -22,11 +22,11 @@ public class ProductRelation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_character_id")
-    private Character fromCharacter;
+    private Person fromPerson;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_character_id")
-    private Character toCharacter;
+    private Person toPerson;
 
     @Column(nullable = false)
     private String productRelationInfo;
@@ -38,19 +38,19 @@ public class ProductRelation {
     private String targetHandle;
 
     @Builder
-    public ProductRelation(Long id, Product product, Character fromCharacter, Character toCharacter, String productRelationInfo, String sourceHandle, String targetHandle) {
+    public ProductRelation(Long id, Product product, Person fromPerson, Person toPerson, String productRelationInfo, String sourceHandle, String targetHandle) {
         this.id = id;
         this.product = product;
-        this.fromCharacter = fromCharacter;
-        this.toCharacter = toCharacter;
+        this.fromPerson = fromPerson;
+        this.toPerson = toPerson;
         this.productRelationInfo = productRelationInfo;
         this.sourceHandle = sourceHandle;
         this.targetHandle = targetHandle;
     }
 
     public void updateProductRelation(ProductRelation productRelation) {
-        this.fromCharacter = productRelation.fromCharacter;
-        this.toCharacter = productRelation.toCharacter;
+        this.fromPerson = productRelation.fromPerson;
+        this.toPerson = productRelation.toPerson;
         this.productRelationInfo = productRelation.getProductRelationInfo();
         this.sourceHandle = productRelation.sourceHandle;
         this.targetHandle = productRelation.targetHandle;

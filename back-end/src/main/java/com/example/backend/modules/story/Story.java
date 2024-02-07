@@ -1,6 +1,5 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
 import com.example.backend.modules.plot.Plot;
 import jakarta.persistence.*;
 import lombok.Builder;

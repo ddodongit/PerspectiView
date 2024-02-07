@@ -1,6 +1,6 @@
 package com.example.backend.modules.keyword;
 
-import com.example.backend.modules.character.CharacterKeyword;
+import com.example.backend.modules.character.PersonKeyword;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ public class Keyword {
 
 
     @OneToMany(mappedBy = "keyword")
-    private Set<CharacterKeyword> characterKeywords = new HashSet<>();
+    private Set<PersonKeyword> personKeywords = new HashSet<>();
 
     @Builder
     public Keyword(String name) {

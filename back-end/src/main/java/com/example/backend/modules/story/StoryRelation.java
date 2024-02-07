@@ -1,12 +1,11 @@
 package com.example.backend.modules.story;
 
-import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.Person;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -21,12 +20,12 @@ public class StoryRelation {
     private Story story;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "charater_id")
-    private Character character;
+    @JoinColumn(name = "peroson_id")
+    private Person person;
 
     @Builder
-    public StoryRelation(Story story, Character character){
+    public StoryRelation(Story story, Person person){
         this.story = story;
-        this.character = character;
+        this.person = person;
     }
 }
