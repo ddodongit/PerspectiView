@@ -23,9 +23,11 @@ const useFshadowQueryModule = (teamId, productId) => {
             // withCredentials: true,
           }
         );
-        console.log("여기", response.data);
+        console.log("여기", response);
+        return response.data;
       } catch (error) {
         console.error(error);
+        throw error;
       }
     },
   });
