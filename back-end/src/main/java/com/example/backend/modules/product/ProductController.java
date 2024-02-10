@@ -62,6 +62,17 @@ public class ProductController {
                 plots.stream().map(PlotResponseDto::of).collect(Collectors.toList())));
     }
 
+    @GetMapping("/{productId}/page/{page}")
+    public ApiResult<ProductResponseDto> getProductPage(@PathVariable("productId") Long productId, @PathVariable("page") int page) {
+        Product product = productService.findByProductId(productId);
+        List<Genre> genres = productService.findGenreList(product.getProductGenres());
+//        List<ProductRelation> productRelations = productService.findProductRelations(productId);
+        List<Plot> plots = productService.findPlots(productId);
+        return ApiResult.OK(ProductResponseDto.of(product,
+                genres.stream().map(GenreResponseDto::of).collect(Collectors.toList()),
+                plots.stream().map(PlotResponseDto::of).collect(Collectors.toList())));
+    }
+
     @GetMapping
     public ApiResult<List<ProductResponseOnlyDto>> getProductList(@PathVariable("teamId") Long teamId){
         //teamId로 productList받기

@@ -31,13 +31,12 @@ public class StoryController {
     }
 
     @PatchMapping("/{storyId}")
-    public ApiResult<StoryResponseDto> updateStory(@RequestBody StoryRequestDto storyRequestDto) {
-        Story story = storyService.updateStory(
-                StoryRequestDto.of(storyRequestDto),
-                storyRequestDto.getCharacters().stream().map(CharacterRequestDto::from).collect(Collectors.toList()),
-                storyRequestDto.getForeShadowings().stream().map(ForeShadowingRequestDto::from).collect(Collectors.toList()));
-
-        StoryResponseDto storyResponseDto = storyService.findByStoryId(story.getId());
+    public ApiResult<StoryResponseDto> updateStory(@PathVariable("storyId") Long storyId, @RequestBody StoryRequestDto storyRequestDto) {
+                StoryResponseDto storyResponseDto = storyService.updateStory(storyId, storyRequestDto);
+//        StoryResponseDto storyResponseDto = storyService.updateStory(
+//                StoryRequestDto.of(storyRequestDto),
+//                storyRequestDto.getCharacters().stream().map(CharacterRequestDto::from).collect(Collectors.toList()),
+//                storyRequestDto.getForeShadowings().stream().map(ForeShadowingRequestDto::from).collect(Collectors.toList()));
         return ApiResult.OK(storyResponseDto);
     }
 

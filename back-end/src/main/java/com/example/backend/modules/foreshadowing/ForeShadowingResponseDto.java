@@ -2,11 +2,13 @@ package com.example.backend.modules.foreshadowing;
 
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.List;
 
 @Data
 @Builder
+@DynamicInsert
 public class ForeShadowingResponseDto {
     Long fShadowId;
     String columnId;

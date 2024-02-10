@@ -16,6 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Story {
+
+    private static final long serialVersionUID = 1L;
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -77,5 +80,9 @@ public class Story {
     //-----y축 바꾸는 메서드-----//
     public void updatePositionY(Double positionY){
         this.positionY = positionY;
+    }
+
+    public void updateContent(Content content){
+        this.content = content;
     }
 }
