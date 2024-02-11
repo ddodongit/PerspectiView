@@ -9,22 +9,18 @@ import java.util.List;
 @Data
 @Builder
 @DynamicInsert
-public class ForeShadowingResponseDto {
+public class ForeShadowingPreviewResponseDto {
     Long fShadowId;
-    String columnId;
     String fshadowName;
     String fshadowContent;
-    List<FshadowStoryIdDto> storyIdList;
     Long fshadowClose;
 
-    public static ForeShadowingResponseDto of(ForeShadowing foreShadowing, List<FshadowStoryIdDto> storyIdList, String columnId){
-        return ForeShadowingResponseDto.builder()
+    public static ForeShadowingPreviewResponseDto of(ForeShadowing foreShadowing){
+        return ForeShadowingPreviewResponseDto.builder()
                 .fShadowId(foreShadowing.getId())
                 .fshadowName(foreShadowing.getFShadowName())
                 .fshadowContent(foreShadowing.getFShadowContent())
                 .fshadowClose(foreShadowing.getFShadowClose())
-                .columnId(columnId)
-                .storyIdList(storyIdList)
                 .build();
     }
 }

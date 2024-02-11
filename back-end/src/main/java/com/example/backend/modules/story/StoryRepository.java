@@ -2,6 +2,7 @@ package com.example.backend.modules.story;
 
 import com.example.backend.modules.plot.Plot;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,6 +21,14 @@ public interface StoryRepository extends JpaRepository<Story,Long> {
     @EntityGraph(attributePaths = {"plot"})
     List<Story> findWithPlotByPlot(Plot plot);
 
-    @EntityGraph(attributePaths = {"plot"})
+    @EntityGraph(attributePaths = {"plot", "content"})
     Optional<Story> findWithPlotById(Long id);
+
+
+    @EntityGraph(attributePaths = {"plot","content"})
+    Optional<Story> findWithPlotContentById(Long id);
+
+    @EntityGraph(attributePaths = {"storyRelations"})
+    List<Story> findWithStoryRelationByPlot(Plot plot);
+
 }

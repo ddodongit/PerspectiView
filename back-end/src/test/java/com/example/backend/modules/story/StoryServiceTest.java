@@ -1,10 +1,12 @@
 package com.example.backend.modules.story;
 
 import com.example.backend.modules.character.Character;
+import com.example.backend.modules.character.CharacterRequestDto;
 import com.example.backend.modules.character.CharacterResponseDto;
 import com.example.backend.modules.character.CharacterService;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import com.example.backend.modules.foreshadowing.ForeShadowingRepository;
+import com.example.backend.modules.foreshadowing.ForeShadowingRequestDto;
 import com.example.backend.modules.plot.Plot;
 import com.example.backend.modules.plot.PlotRepository;
 import com.example.backend.modules.product.Product;
@@ -99,6 +101,7 @@ class StoryServiceTest {
 
     private Content content;
 
+    private StoryRequestDto storyRequestDto;
     @PersistenceContext
     EntityManager em;
 
@@ -152,7 +155,7 @@ class StoryServiceTest {
 
         characters = new ArrayList<>();
         foreShadowings = new ArrayList<>();
-        storyService.createStory(story, "", characters);
+        storyService.createStory(story, plot.getId(),"", characters,foreShadowings);
 
         fromCharacter = Character.builder()
                 .product(product)
@@ -184,6 +187,26 @@ class StoryServiceTest {
         log.info(String.valueOf(storyForeShadowing.getStory().getPositionX()));
 
         story.addStoryForeShadowing(storyForeShadowing);
+
+        storyRequestDto = StoryRequestDto.builder()
+                .storyTitle(story.getTitle())
+                .storyContent(story.getContent().getContent())
+                .characters(characters.stream().map(character ->
+                        CharacterRequestDto.builder()
+                                .id(character.getId())
+                                .name(character.getCharacterName())
+                                .detail(character.getCharacterDetail())
+                                .positionY(character.getPositionY())
+                                .positionX(character.getPositionX())
+                                .build()).collect(Collectors.toList()))
+                .foreShadowings(foreShadowings.stream().map(foreShadowing1 ->
+                        ForeShadowingRequestDto.builder()
+                                .fShadowName(foreShadowing1.getFShadowName())
+                                .fshadowContent(foreShadowing1.getFShadowContent())
+                                .build()).collect(Collectors.toList()))
+                .positionX(story.getPositionX())
+                .positionY(story.getPositionY())
+                .build();
     }
 
 
@@ -214,13 +237,12 @@ class StoryServiceTest {
                 .storyForeShadowings(new HashSet<>())
                 .storyRelations(new HashSet<>())
                 .build();
-        String content = "내용이 들어감";
 
+        String content = "내용이 들어감";
         System.out.println("생성 테스트 전 스토리 전체 개수: " + storyRepository.findAll().size());
 
-
         //when
-        Story result = storyService.createStory(s, content, characters);
+        Story result = storyService.createStory(s, plot.getId(), content, characters,foreShadowings);
         em.flush();
         em.clear();
 
@@ -253,8 +275,30 @@ class StoryServiceTest {
                 .storyForeShadowings(new HashSet<>())
                 .storyRelations(new HashSet<>())
                 .build();
+        StoryRequestDto storyRequestDto = StoryRequestDto.builder()
+                .storyTitle(newStory.getTitle())
+                .storyContent(newStory.getContent().getContent())
+                .characters(characters.stream().map(character ->
+                        CharacterRequestDto.builder()
+                                .id(character.getId())
+                                .name(character.getCharacterName())
+                                .detail(character.getCharacterDetail())
+                                .positionY(character.getPositionY())
+                                .positionX(character.getPositionX())
+                                .build()).collect(Collectors.toList()))
+                .foreShadowings(foreShadowings.stream().map(foreShadowing1 ->
+                        ForeShadowingRequestDto.builder()
+                                .fShadowName(foreShadowing1.getFShadowName())
+                                .fshadowContent(foreShadowing1.getFShadowContent())
+                                .build()).collect(Collectors.toList()))
+                .positionX(newStory.getPositionX())
+                .positionY(newStory.getPositionY())
+                .build();
+
+        System.out.println("updateTitle@@@@@@@@@@@@");
+        System.out.println(storyRequestDto.getStoryTitle());
         //when
-        Story updatedStory = storyService.updateStory(newStory, characters, foreShadowings);
+        StoryResponseDto updatedStory = storyService.updateStory(story.getId(), storyRequestDto);
         em.flush();
         em.clear();
         List<Story> checkQuery = storyRepository.findWithPlotByPlot(plot);
@@ -262,7 +306,7 @@ class StoryServiceTest {
         checkQuery.get(0).getPlot().getName();
 
         //then
-        Assertions.assertEquals(updatedStory.getTitle(), newStory.getTitle());
+        Assertions.assertEquals(updatedStory.getStoryTitle(), newStory.getTitle());
     }
 
     @Test
@@ -276,7 +320,7 @@ class StoryServiceTest {
                 .storyForeShadowings(new HashSet<>())
                 .storyRelations(new HashSet<>())
                 .build();
-        storyService.createStory(delStory, "스토리 내용", characters);
+        storyService.createStory(delStory, plot.getId(), "스토리 내용", characters,foreShadowings);
         //when
         storyService.deleteStory(delStory.getId());
         //then
@@ -290,7 +334,9 @@ class StoryServiceTest {
         List<Character> characters1 = new ArrayList<>();
         characters1.add(toCharacter);
         characters1.add(fromCharacter);
-        storyService.updateStory(story, characters1, foreShadowings);
+
+
+        storyService.updateStory(story.getId(), storyRequestDto);
 
         //when
         int result = storyService.findByStoryId(story.getId()).getCharacters().size();
@@ -305,11 +351,11 @@ class StoryServiceTest {
         List<Character> characters1 = new ArrayList<>();
         characters1.add(toCharacter);
         characters1.add(fromCharacter);
-        storyService.updateStory(story, characters1, foreShadowings);
+        storyService.updateStory(story.getId(), storyRequestDto);
 
         List<Character> characters2 = new ArrayList<>();
         characters2.add(toCharacter);
-        storyService.updateStory(story, characters2, foreShadowings);
+        storyService.updateStory(story.getId(), storyRequestDto);
 
         //when
         int result = storyService.findByStoryId(story.getId()).getCharacters().size();

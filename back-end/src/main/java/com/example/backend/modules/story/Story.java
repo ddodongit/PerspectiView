@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,6 +17,9 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Story {
+
+    private static final long serialVersionUID = 1L;
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -78,4 +82,18 @@ public class Story {
     public void updatePositionY(Double positionY){
         this.positionY = positionY;
     }
+
+    public void updateContent(Content content){
+        this.content = content;
+    }
+
+    //-----plot 설정하는 메서드-----//
+    public void updatePlot(Plot plot){
+        this.plot = plot;
+    }
+
+    public void updateStoryRelation(List<StoryRelation> storyRelations) {
+        if(storyRelations!=null) storyRelations.addAll(storyRelations);
+    }
+
 }
