@@ -1,5 +1,6 @@
 package com.example.backend.modules.foreshadowing;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;

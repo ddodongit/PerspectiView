@@ -146,8 +146,8 @@ class ProductRelationServiceTest {
                 .positionX(1)
                 .positionY(1.0)
                 .plot(plot)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
 
         characters = new ArrayList<>();

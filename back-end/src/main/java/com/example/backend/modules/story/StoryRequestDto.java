@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -22,7 +21,7 @@ public class StoryRequestDto {
     private Double positionY;
 
 //    public static Story of(StoryRequestDto storyRequestDto) {
-    public static Story from(StoryRequestDto storyRequestDto, Set<StoryRelation> storyRelations, Set<StoryForeShadowing> storyForeShadowings) {
+    public static Story from(StoryRequestDto storyRequestDto,List<StoryRelation> storyRelations,List<StoryForeShadowing> storyForeShadowings) {
         return Story.builder()
                 .title(storyRequestDto.getStoryTitle())
                 .storyRelations(storyRelations)

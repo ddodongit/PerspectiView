@@ -7,7 +7,6 @@ import com.example.backend.modules.exception.NotFoundException;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
 import com.example.backend.modules.foreshadowing.ForeShadowingRepository;
 import com.example.backend.modules.foreshadowing.ForeShadowingRequestDto;
-import com.example.backend.modules.foreshadowing.ForeShadowingResponseDto;
 import com.example.backend.modules.plot.Plot;
 import com.example.backend.modules.plot.PlotRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +31,13 @@ public class StoryService {
     private final ForeShadowingRepository foreShadowingRepository;
     private final PlotRepository plotRepository;
     private final CharacterRepository characterRepository;
+
     /**
      * 스토리 생성
      */
     @Transactional
-    public Story createStory(Story story, Long plotId, String storycontent, List<Character> characters, List<ForeShadowing> foreShadowings) {
+    @CachePut(value = "StoryResponseDto", key = "#story.id", cacheManager = "testCacheManager")
+    public StoryResponseDto createStory(Story story, Long plotId, String storycontent, List<Character> characters, List<ForeShadowing> foreShadowings) {
         /**
          * 순서는 플롯 안에서의 순서는 따진다.
          * update story s left join plot p
@@ -78,10 +79,8 @@ public class StoryService {
             madeStory.addStoryForeShadowing(makeStoryForeShadowing);
         }
 
-
-        return madeStory;
+        return StoryResponseDto.of(madeStory,characters,foreShadowings);
     }
-
 
     /**
      * story content 생성
@@ -214,23 +213,25 @@ public class StoryService {
     }
 
 
-
-
     /**
      * 복선 스토리에서 삭제
      */
-    public ForeShadowing deleteStoryFshadow(ForeShadowing foreShadowing, Long storyId) {
-        ForeShadowing fshadow = foreShadowingRepository.findById(foreShadowing.getId()).orElseThrow(()->new NotFoundException());
+    @Transactional
+    public ForeShadowing deleteStoryFshadow(Long foreshadowingId, Long storyId) {
+        ForeShadowing fshadow = foreShadowingRepository.findById(foreshadowingId).orElseThrow(()->new NotFoundException());
+
         //복선리스트에서 복선스토리 삭제
-        StoryForeShadowing sfs = storyForeShadowingRepository.findByForeShadowing(foreShadowing);
+        StoryForeShadowing sfs = storyForeShadowingRepository.findByForeShadowing(fshadow);
         fshadow.deleteStoryFshadow(sfs);
         storyForeShadowingRepository.delete(sfs);
-        return foreShadowing;
+
+        return fshadow;
     }
 
     /**
      * 복선 회수
      */
+    @Transactional
     public ForeShadowing updateFshadowClose(Long fshadowId, Long closeStoryId){
         ForeShadowing foreShadowing = foreShadowingRepository.findById(fshadowId).orElseThrow(()->new NotFoundException());
         foreShadowing.updateFshadowClose(closeStoryId);
@@ -240,12 +241,12 @@ public class StoryService {
     /**
      * 복선 회수 취소
      */
+    @Transactional
     public ForeShadowing deleteFshadowClose(Long fshadowId, Long closeStoryId){
         ForeShadowing foreShadowing = foreShadowingRepository.findById(fshadowId).orElseThrow(()->new NotFoundException());
         foreShadowing.updateFshadowClose(null);
         return foreShadowing;
     }
-
 
     /**
      * 스토리 등장인물이랑 같이 조회
@@ -265,7 +266,6 @@ public class StoryService {
     public List<StoryRelation> findWithCharacterByStory(Story story){
         return storyRelationRepository.findWithCharacterByStory(story);
     }
-
 
 
 }

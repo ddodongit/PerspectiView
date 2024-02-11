@@ -1,5 +1,6 @@
 package com.example.backend.modules.character;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;

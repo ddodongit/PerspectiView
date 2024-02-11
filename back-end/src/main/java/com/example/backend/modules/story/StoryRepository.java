@@ -2,7 +2,6 @@ package com.example.backend.modules.story;
 
 import com.example.backend.modules.plot.Plot;
 import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

@@ -149,13 +149,13 @@ class StoryServiceTest {
                 .positionX(1)
                 .positionY(1.0)
                 .plot(plot)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
 
         characters = new ArrayList<>();
         foreShadowings = new ArrayList<>();
-        storyService.createStory(story, plot.getId(),"", characters,foreShadowings);
+        storyService.createStory(story, plot.getId(), "", characters,foreShadowings);
 
         fromCharacter = Character.builder()
                 .product(product)
@@ -234,15 +234,16 @@ class StoryServiceTest {
                 .positionX(1)
                 .positionY(1.0)
                 .plot(plot)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
-
         String content = "내용이 들어감";
+
         System.out.println("생성 테스트 전 스토리 전체 개수: " + storyRepository.findAll().size());
 
+
         //when
-        Story result = storyService.createStory(s, plot.getId(), content, characters,foreShadowings);
+        StoryResponseDto result = storyService.createStory(s, plot.getId(), content, characters,foreShadowings);
         em.flush();
         em.clear();
 
@@ -257,7 +258,7 @@ class StoryServiceTest {
         }
 
         //then
-        assertEquals("생성테스트 story", result.getTitle(), "title이 다릅니다.");
+        assertEquals("생성테스트 story", result.getStoryTitle(), "title이 다릅니다.");
         assertEquals(1, story2.getPositionX(), "순서가 다릅니다.");
         assertEquals(2, story1.getPositionX(), "순서가 업데이트가 안되네요;;");
     }
@@ -272,8 +273,8 @@ class StoryServiceTest {
                 .content(content)
                 .positionY(1.0)
                 .plot(plot)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
         StoryRequestDto storyRequestDto = StoryRequestDto.builder()
                 .storyTitle(newStory.getTitle())
@@ -317,8 +318,8 @@ class StoryServiceTest {
                 .positionX(1)
                 .positionY(1.0)
                 .plot(plot)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
         storyService.createStory(delStory, plot.getId(), "스토리 내용", characters,foreShadowings);
         //when

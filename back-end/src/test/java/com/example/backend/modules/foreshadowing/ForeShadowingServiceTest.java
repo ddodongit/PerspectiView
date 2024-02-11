@@ -95,8 +95,8 @@ class ForeShadowingServiceTest {
                 .positionY(1.0)
                 .plot(p)
                 .content(c)
-                .storyForeShadowings(new HashSet<>())
-                .storyRelations(new HashSet<>())
+                .storyForeShadowings(new ArrayList<>())
+                .storyRelations(new ArrayList<>())
                 .build();
 
         return storyRepository.save(story);

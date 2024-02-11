@@ -131,15 +131,6 @@ public class ProductService {
     }
 
     /**
-     * 팀 작품 아이디로 조회 ( 페이징 된 스토리리스트 가져오기 )
-     */
-    public Product findWithPageByProductId(Long productId, int page) {
-        Product findProduct = productRepository.findWithGenreCategoryById(productId).orElseThrow(() -> new NotFoundException());
-
-        return findProduct;
-    }
-
-    /**
      * 작품장르 리스트로 장르 리스트 주기
      */
     public List<Genre> findGenreList(Set<ProductGenre> productGenres) {
