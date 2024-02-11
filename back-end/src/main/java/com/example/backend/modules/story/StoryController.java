@@ -52,15 +52,15 @@ public class StoryController {
     @PostMapping("/{storyId}/vertical")
     public ApiResult<StoryResponseDto> updatePositionY(@PathVariable("storyId") Long storyId,
                                                        @RequestBody StoryRequestDto storyRequestDto) {
-        storyService.updatePositionY(StoryRequestDto.from(storyRequestDto,null,null));
-        StoryResponseDto storyResponseDto = storyService.findByStoryId(storyId);
+        StoryResponseDto storyResponseDto = storyService.updatePositionY(StoryRequestDto.from(storyRequestDto,null,null));
         return ApiResult.OK(storyResponseDto);
     }
 
     @PutMapping("/{storyId}/fsStatus/{foreshadowingId}")
     public ApiResult<ForeShadowingResponseDto> addForeShadowing(@PathVariable("storyId") Long storyId,
                                                                 @PathVariable("foreshadowingId") Long foreshadowingId) {
-        ForeShadowing result = storyService.createStoryFshadow(foreshadowingId, storyId);
+        storyService.createStoryFshadow(foreshadowingId, storyId);
+        ForeShadowing result = foreShadowingService.findById(foreshadowingId);
         List<FshadowStoryIdDto> storyIds = foreShadowingService.findStories(result);
         String columnId = setColumn(storyIds, result);
 
@@ -86,8 +86,9 @@ public class StoryController {
     public ApiResult<ForeShadowingResponseDto> delForeShadowing(@PathVariable("storyId") Long storyId,
                                                                 @PathVariable("foreshadowingId") Long foreshadowingId) {
 
-        ForeShadowing result = storyService.deleteStoryFshadow(foreshadowingId, storyId);
-        List<FshadowStoryIdDto> storyIds = foreShadowingService.findStories(result);
+        storyService.deleteStoryFshadow(foreshadowingId, storyId);
+        ForeShadowing result = foreShadowingService.findById(foreshadowingId);
+                List<FshadowStoryIdDto> storyIds = foreShadowingService.findStories(result);
         String columnId = setColumn(storyIds, result);
 
         return ApiResult.OK(ForeShadowingResponseDto.of(result, storyIds, columnId));

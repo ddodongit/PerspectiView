@@ -5,6 +5,7 @@ import com.example.backend.modules.character.CharacterRepository;
 import com.example.backend.modules.character.CharacterRequestDto;
 import com.example.backend.modules.exception.NotFoundException;
 import com.example.backend.modules.foreshadowing.ForeShadowing;
+import com.example.backend.modules.foreshadowing.ForeShadowingPreviewResponseDto;
 import com.example.backend.modules.foreshadowing.ForeShadowingRepository;
 import com.example.backend.modules.foreshadowing.ForeShadowingRequestDto;
 import com.example.backend.modules.plot.Plot;
@@ -186,10 +187,11 @@ public class StoryService {
     /**
      * 스토리 y축
      */
-    public Story updatePositionY(Story story) {
+    @CachePut(value = "StoryResponseDto", key = "#story.id", cacheManager = "testCacheManager")
+    public StoryResponseDto updatePositionY(Story story) {
         Story findStory = storyRepository.findById(story.getId()).orElseThrow(() -> new RuntimeException());
         findStory.updatePositionY(story.getPositionY());
-        return findStory;
+        return findByStoryId(story.getId());
     }
 
 
@@ -197,7 +199,8 @@ public class StoryService {
      * 복선 스토리에 추가
      */
     @Transactional
-    public ForeShadowing createStoryFshadow(Long foreshadowingId, Long storyId) {
+    @CachePut(value = "StoryResponseDto", key = "#storyId", cacheManager = "testCacheManager")
+    public StoryResponseDto createStoryFshadow(Long foreshadowingId, Long storyId) {
         ForeShadowing fshadow = foreShadowingRepository.findById(foreshadowingId).orElseThrow(()->new NotFoundException());
 
         Story story = storyRepository.findById(storyId).orElseThrow(() -> new NotFoundException());
@@ -205,11 +208,11 @@ public class StoryService {
         StoryForeShadowing storyForeShadowing = storyForeShadowingRepository.save(StoryForeShadowing.builder()
                 .foreShadowing(fshadow)
                 .story(story).build());
-
-
         fshadow.addStoryFshadow(storyForeShadowing);
 
-        return fshadow;
+        StoryResponseDto storyResponseDto = findByStoryId(storyId);
+        storyResponseDto.getForeShadowings().add(ForeShadowingPreviewResponseDto.of(fshadow));
+        return storyResponseDto;
     }
 
 
@@ -217,15 +220,17 @@ public class StoryService {
      * 복선 스토리에서 삭제
      */
     @Transactional
-    public ForeShadowing deleteStoryFshadow(Long foreshadowingId, Long storyId) {
+    @CachePut(value = "StoryResponseDto", key = "#storyId", cacheManager = "testCacheManager")
+    public StoryResponseDto deleteStoryFshadow(Long foreshadowingId, Long storyId) {
         ForeShadowing fshadow = foreShadowingRepository.findById(foreshadowingId).orElseThrow(()->new NotFoundException());
 
         //복선리스트에서 복선스토리 삭제
         StoryForeShadowing sfs = storyForeShadowingRepository.findByForeShadowing(fshadow);
-        fshadow.deleteStoryFshadow(sfs);
         storyForeShadowingRepository.delete(sfs);
 
-        return fshadow;
+        StoryResponseDto storyResponseDto = findByStoryId(storyId);
+//        storyResponseDto.getForeShadowings().add(ForeShadowingPreviewResponseDto.of(fshadow));
+        return storyResponseDto;
     }
 
     /**

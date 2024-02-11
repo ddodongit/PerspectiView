@@ -46,6 +46,12 @@ public class ForeShadowingService {
         return foreShadowingRepository.findByProduct(product);
     }
 
+    /**
+     * 복선 아이디로 조회
+     * */
+    public ForeShadowing findById(Long foreShadowingId){
+        return foreShadowingRepository.findById(foreShadowingId).orElseThrow(() -> new NotFoundException());
+    }
 
     /**
      * 복선 수정

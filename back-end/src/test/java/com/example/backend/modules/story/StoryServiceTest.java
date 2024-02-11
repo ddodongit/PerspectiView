@@ -89,6 +89,8 @@ class StoryServiceTest {
 
     private ForeShadowing foreShadowing;
 
+    private ForeShadowing foreShadowing2;
+
     private List<ForeShadowing> foreShadowings;
 
     List<Character> characters;
@@ -175,18 +177,35 @@ class StoryServiceTest {
                 .fShadowName("fShadowName")
                 .fShadowContent("fShadowContent")
                 .build();
+
+        foreShadowing2 = ForeShadowing.builder()
+                .product(product)
+                .fShadowClose(null)
+                .fShadowName("fShadowName22")
+                .fShadowContent("fShadowContent")
+                .build();
+
         foreShadowingRepository.save(foreShadowing);
+        foreShadowingRepository.save(foreShadowing2);
 
         StoryForeShadowing storyForeShadowing = StoryForeShadowing.builder()
                 .story(story)
                 .foreShadowing(foreShadowing)
                 .build();
+
+        StoryForeShadowing storyForeShadowing2 = StoryForeShadowing.builder()
+                .story(story)
+                .foreShadowing(foreShadowing2)
+                .build();
+
         storyForeShadowingRepository.save(storyForeShadowing);
+        storyForeShadowingRepository.save(storyForeShadowing2);
 
         log.info(storyForeShadowing.getStory().getTitle());
         log.info(String.valueOf(storyForeShadowing.getStory().getPositionX()));
 
         story.addStoryForeShadowing(storyForeShadowing);
+        story.addStoryForeShadowing(storyForeShadowing2);
 
         storyRequestDto = StoryRequestDto.builder()
                 .storyTitle(story.getTitle())
@@ -244,10 +263,17 @@ class StoryServiceTest {
 
         //when
         StoryResponseDto result = storyService.createStory(s, plot.getId(), content, characters,foreShadowings);
-        em.flush();
-        em.clear();
+
 
         StoryResponseDto story1 = storyService.findByStoryId(story.getId());
+
+        for (int i = 0; i < 100; i++) {
+            storyService.findByStoryId(story.getId());
+            System.out.println("@@@find" + i);
+            em.flush();
+            em.clear();
+        }
+
         StoryResponseDto story2 = storyService.findByStoryId(s.getId());
 
         System.out.println("생성 테스트 하고 난 후 스토리 전체 개수: " + storyRepository.findAll().size());
@@ -379,5 +405,27 @@ class StoryServiceTest {
         StoryResponseDto findStory = storyService.findByStoryId(newStory.getId());
         //then
         assertEquals(newStory.getPositionY(), findStory.getPositionY(), "위치가 변해야합니다.");
+    }
+
+    @Test
+    public void 복선스토리삭제테스트() throws Exception {
+        //given
+        System.out.println("@@@@@복선스토리삭제테스트@@@@@");
+        Set<StoryForeShadowing> storyForeShadowings = story.getStoryForeShadowings();
+        storyForeShadowings.forEach(storyForeShadowing -> System.out.println(storyForeShadowing.getForeShadowing()));
+                for(StoryForeShadowing s: storyForeShadowings){
+                    System.out.println(s.getForeShadowing().getFShadowName());
+                }
+        //when
+        storyService.deleteStoryFshadow(foreShadowing2.getId(), story.getId());
+                em.flush();
+                em.clear();
+        //then
+        System.out.println("@@@@then");
+        storyForeShadowings = story.getStoryForeShadowings();
+        storyForeShadowings.forEach(storyForeShadowing -> System.out.println(storyForeShadowing.getForeShadowing()));
+        for(StoryForeShadowing s: storyForeShadowings){
+            System.out.println(s.getForeShadowing().getFShadowName());
+        }
     }
 }
