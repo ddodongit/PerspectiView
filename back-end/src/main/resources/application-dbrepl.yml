@@ -15,6 +15,7 @@ spring:
         username: ENC(yMgDqBlpbMs98LspyOzF+dnIFDU/hupZNDQjCRKk0P7/oZmF8yu8UVQROLtEaW4J)
         password: ENC(XwSTuuIUTNWcrQXxmA8oZtvetD3PxcrwqnAZq9912SPVZsjMY2XGpi6cY7QyYTVA)
 
+
   jpa:
     open-in-view: false
     show-sql: true
