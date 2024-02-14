@@ -81,7 +81,7 @@ public class StoryService {
 //            madeStory.addStoryForeShadowing(makeStoryForeShadowing);
         }
 
-        redisTemplate.opsForValue().set("story:" + story.getId(), StoryResponseDto.of(madeStory, characters, foreShadowings));
+//        redisTemplate.opsForValue().set("story:" + story.getId(), StoryResponseDto.of(madeStory, characters, foreShadowings));
 
         return madeStory;
     }
@@ -138,7 +138,7 @@ public class StoryService {
         StoryResponseDto storyResponseDto = StoryResponseDto.of(story, characters, foreShadowings);
         storyResponseDto.setStoryId(storyId);
 
-        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto);
+//        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto);
         return findStory;
     }
 
@@ -150,7 +150,7 @@ public class StoryService {
     @Transactional
     public void deleteStory(Long storyId) {
         storyRepository.deleteById(storyId);
-        redisTemplate.delete("story:" + storyId);
+//        redisTemplate.delete("story:" + storyId);
     }
 
     /**
@@ -160,22 +160,22 @@ public class StoryService {
      * @return
      */
     public StoryResponseDto findByStoryId(Long storyId) {
-        StoryResponseDto storyResponseDto = (StoryResponseDto) redisTemplate.opsForValue().get("story:" + storyId);
-        if (storyResponseDto == null) {
-            Story story = storyRepository.findWithPlotContentById(storyId).orElseThrow(() -> new NotFoundException());
-            List<Character> characterList = story.getStoryRelations().stream()
-                    .map(StoryRelation::getCharacter)
-                    .collect(Collectors.toList());
+//        StoryResponseDto storyResponseDto = (StoryResponseDto) redisTemplate.opsForValue().get("story:" + storyId);
+//        if (storyResponseDto == null) {
+        Story story = storyRepository.findWithPlotContentById(storyId).orElseThrow(() -> new NotFoundException());
+        List<Character> characterList = story.getStoryRelations().stream()
+                .map(StoryRelation::getCharacter)
+                .collect(Collectors.toList());
 
-            List<ForeShadowing> foreShadowingList = story.getStoryForeShadowings().stream()
-                    .map(StoryForeShadowing::getForeShadowing)
-                    .collect(Collectors.toList());
+        List<ForeShadowing> foreShadowingList = story.getStoryForeShadowings().stream()
+                .map(StoryForeShadowing::getForeShadowing)
+                .collect(Collectors.toList());
 
-            redisTemplate.opsForValue().set("story:" + storyId, StoryResponseDto.of(story, characterList, foreShadowingList));
-            return StoryResponseDto.of(story, characterList, foreShadowingList);
-        } else {
-            return storyResponseDto;
-        }
+//            redisTemplate.opsForValue().set("story:" + storyId, StoryResponseDto.of(story, characterList, foreShadowingList));
+        return StoryResponseDto.of(story, characterList, foreShadowingList);
+//        } else {
+//            return storyResponseDto;
+//        }
     }
 
     /**
@@ -206,8 +206,8 @@ public class StoryService {
         findStory.updatePositionY(positionY);
         log.info("=============스토리 y축 변경함=============");
 
-        StoryResponseDto storyResponseDto = findByStoryId(storyId);
-        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(findStory, storyResponseDto.getCharacters(), storyResponseDto.getForeShadowings()));
+//        StoryResponseDto storyResponseDto = findByStoryId(storyId);
+//        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(findStory, storyResponseDto.getCharacters(), storyResponseDto.getForeShadowings()));
         return findStory;
     }
 
@@ -237,10 +237,10 @@ public class StoryService {
         story.addStoryForeShadowing(storyForeShadowing);
         fshadow.addStoryFshadow(storyForeShadowing);
 
-        StoryResponseDto storyResponseDto = findByStoryId(storyId);
-        List<ForeShadowingPreviewDto> foreShadowings = storyResponseDto.getForeShadowings();
-        foreShadowings.add(ForeShadowingPreviewDto.of(fshadow));
-        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(story, storyResponseDto.getCharacters(), foreShadowings));
+//        StoryResponseDto storyResponseDto = findByStoryId(storyId);
+//        List<ForeShadowingPreviewDto> foreShadowings = storyResponseDto.getForeShadowings();
+//        foreShadowings.add(ForeShadowingPreviewDto.of(fshadow));
+//        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(story, storyResponseDto.getCharacters(), foreShadowings));
 
         return fshadow;
     }
@@ -257,14 +257,14 @@ public class StoryService {
         //복선리스트에서 복선스토리 삭제
         StoryForeShadowing sfs = storyForeShadowingRepository.findByForeShadowingAndStory(fshadow, story);
         fshadow.deleteStoryFshadow(sfs);
-        if(sfs!=null){
-        storyForeShadowingRepository.delete(sfs);
+        if (sfs != null) {
+            storyForeShadowingRepository.delete(sfs);
         }
 
-        StoryResponseDto storyResponseDto = findByStoryId(storyId);
-        List<ForeShadowingPreviewDto> foreShadowings = storyResponseDto.getForeShadowings();
-        foreShadowings.remove(ForeShadowingPreviewDto.of(fshadow));
-        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(story, storyResponseDto.getCharacters(), foreShadowings));
+//        StoryResponseDto storyResponseDto = findByStoryId(storyId);
+//        List<ForeShadowingPreviewDto> foreShadowings = storyResponseDto.getForeShadowings();
+//        foreShadowings.remove(ForeShadowingPreviewDto.of(fshadow));
+//        redisTemplate.opsForValue().set("story:" + storyId, storyResponseDto.updateStoryResponseDto(story, storyResponseDto.getCharacters(), foreShadowings));
         return fshadow;
     }
 
@@ -316,9 +316,9 @@ public class StoryService {
      * 스토리 등장인물 추가
      */
     @Transactional
-    public Character addStoryRelation(Long storyId, Long characterId){
-        Story story = storyRepository.findById(storyId).orElseThrow(()-> new NotFoundException());
-        Character character = characterRepository.findById(characterId).orElseThrow(()-> new NotFoundException());
+    public Character addStoryRelation(Long storyId, Long characterId) {
+        Story story = storyRepository.findById(storyId).orElseThrow(() -> new NotFoundException());
+        Character character = characterRepository.findById(characterId).orElseThrow(() -> new NotFoundException());
         log.info("===============캐릭터 보기=====================");
         log.info(character.getCharacterName());
 
@@ -338,12 +338,12 @@ public class StoryService {
      * @return
      */
     @Transactional
-    public Character deleteStoryRelation(Long storyId, Long characterId){
+    public Character deleteStoryRelation(Long storyId, Long characterId) {
         //character와 story로 storyrelation찾기
-        Story story = storyRepository.findById(storyId).orElseThrow(()-> new NotFoundException());
-        Character character = characterRepository.findById(characterId).orElseThrow(()-> new NotFoundException());
+        Story story = storyRepository.findById(storyId).orElseThrow(() -> new NotFoundException());
+        Character character = characterRepository.findById(characterId).orElseThrow(() -> new NotFoundException());
 
-        StoryRelation storyRelation = storyRelationRepository.findByStoryAndCharacter(story, character).orElseThrow(()->new NotFoundException());
+        StoryRelation storyRelation = storyRelationRepository.findByStoryAndCharacter(story, character).orElseThrow(() -> new NotFoundException());
         storyRelationRepository.delete(storyRelation);
         return character;
     }
