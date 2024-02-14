@@ -14,9 +14,11 @@ spring:
 
   data:
     redis:
-      host: 172.17.0.1
+#      host: 172.17.0.1
+      host: localhost
       port: 6379
-      password: ENC(QY5uK+t5CcE+BXGp0ZfvfkvE4GhlM5aUO5zwcH5I+/eS7COcjWkjSzXNRa9joPRn)
+#      password: ENC(QY5uK+t5CcE+BXGp0ZfvfkvE4GhlM5aUO5zwcH5I+/eS7COcjWkjSzXNRa9joPRn)
+      password:
     rest:
       base-path: /api
 
@@ -30,14 +32,14 @@ spring:
     url: ENC(c+l6vK2w3qVKeapUlbWXl2Wt72W7Dafiivq1UMJVzUzW4UwhZ5ttUUSWjiOZaX1w5oGa1gj9Y5X7dybA+x9PMiuTx5qil4ekHksfE/jC0PU=) # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
     username: ENC(zk88hi4Rokn+cB8QZeFwpFN+te4XtlP4BTiKt/wmutahj9cSxpQmTvVgXshy4+Dq)
-    password: ENC(SDmDVzpclQ0csbYgu1uuEd6oo/JGhN+7h4d1yeZv1WLMlhqepP6teDQX0CfBlzkV)
+    password: ENC(fkZugRix44Xs/HXw8aWOMWW2a8n7mq6SRUukVWTDUo8czrkLPJ6OHPbfaOiJiD/5)
 
   # spring data jpa 설정
   jpa:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
