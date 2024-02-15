@@ -27,7 +27,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(c+l6vK2w3qVKeapUlbWXl2Wt72W7Dafiivq1UMJVzUzW4UwhZ5ttUUSWjiOZaX1w5oGa1gj9Y5X7dybA+x9PMiuTx5qil4ekHksfE/jC0PU=) # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: ENC(MJCFRbp4evoCCrIkj2/VKxI/pXYbXJWipVxvZn1qbK5Up7T3G/w7bUpVUs8Oyt97KpoqgLjBZxs3t/i2FodinJfhiH2CZ246LjtVVtinJOE=) # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
     username: ENC(zk88hi4Rokn+cB8QZeFwpFN+te4XtlP4BTiKt/wmutahj9cSxpQmTvVgXshy4+Dq)
     password: ENC(fkZugRix44Xs/HXw8aWOMWW2a8n7mq6SRUukVWTDUo8czrkLPJ6OHPbfaOiJiD/5)
